@@ -1,0 +1,52 @@
+name: Build & deploy dashboards
+
+on:
+  # Daily at 23:11 UTC (03:11 Abu Dhabi). Off the congested :00 slot to limit
+  # scheduler drift. GitHub may still delay scheduled runs under load.
+  schedule:
+    - cron: "11 23 * * *"
+  workflow_dispatch:   # allow manual runs from the Actions tab
+  push:
+    branches: [main]
+
+# Required for the Pages deploy actions.
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Never run two deploys at once; let the newest win.
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v5
+
+      - name: Set up Python
+        run: uv python install 3.12
+
+      - name: Build dashboards
+        run: uv run python scripts/build_all.py
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: output
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

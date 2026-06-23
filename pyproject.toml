@@ -1,0 +1,29 @@
+[project]
+name = "dashboards"
+version = "0.1.0"
+description = "Daily markets & commodities dashboards (published to GitHub Pages)"
+requires-python = ">=3.12"
+dependencies = [
+    "pandas>=2.2",
+    "numpy>=1.26",
+    "requests>=2.31",
+    "python-dotenv>=1.0",
+    "yfinance>=0.2.40",
+]
+
+[dependency-groups]
+dev = [
+    "ruff>=0.6",
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+# `src/dashlib`  -> import dashlib.fetchers
+# `dashboards/`  -> import dashboards.markets_tracker
+[tool.hatch.build.targets.wheel]
+packages = ["src/dashlib", "dashboards"]
+
+[tool.uv]
+package = true
