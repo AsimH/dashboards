@@ -12,6 +12,7 @@ from datetime import datetime, timezone
 
 from dashboards import markets_tracker
 from dashboards import commodities
+from dashboards import stock_alert_tracker
 
 OUTPUT_DIR = "output"
 
@@ -21,6 +22,8 @@ DASHBOARDS = [
      lambda: markets_tracker.main(out_path=os.path.join(OUTPUT_DIR, "markets_tracker.html"))),
     ("commodities", "Commodities",
      lambda: commodities.main(out_path=os.path.join(OUTPUT_DIR, "commodities.html"))),
+    ("stock_alert_tracker", "Stock Alert Tracker",
+     lambda: stock_alert_tracker.main(out_path=os.path.join(OUTPUT_DIR, "stock_alert_tracker.html"))),
 ]
 
 
