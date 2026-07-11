@@ -35,6 +35,16 @@ jobs:
       - name: Build dashboards
         run: uv run python scripts/build_all.py
 
+      - name: Add PSX portfolio tracker
+        env:
+          PSX_URL_BASE: ${{ vars.PSX_URL_BASE }}
+        run: |
+          mkdir -p output/portfolio
+          cp portfolio/index.html output/portfolio/index.html
+          python scripts/build_prices.py \
+            --url-base "$PSX_URL_BASE" --lookback 5 \
+            --out output/portfolio/prices.json
+
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
         with:
