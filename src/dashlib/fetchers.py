@@ -2,15 +2,26 @@
 import pandas as pd
 
 
-def fetch_yfinance_panel(tickers: list[str], period: str = "2y") -> pd.DataFrame:
+def fetch_yfinance_panel(
+    tickers: list[str],
+    period: str = "2y",
+    start: str | None = None,
+    auto_adjust: bool = True,
+    ffill: bool = True,
+) -> pd.DataFrame:
     """Fetch many tickers in a single network call, return wide DataFrame
     (index = date, columns = tickers). Drops tickers that came back empty.
+    `start` (YYYY-MM-DD) overrides `period`; `auto_adjust=False` gives raw
+    closes (price return, dividends excluded). `ffill=False` leaves NaN on
+    dates a ticker didn't trade (e.g. US tickers on a row created by an HK
+    session), so per-ticker `.dropna()` yields only its own sessions.
     """
     import yfinance as yf
     df = yf.download(
         tickers=" ".join(tickers),
-        period=period,
-        auto_adjust=True,
+        period=None if start else period,
+        start=start,
+        auto_adjust=auto_adjust,
         progress=False,
         group_by="ticker",
     )
@@ -26,4 +37,5 @@ def fetch_yfinance_panel(tickers: list[str], period: str = "2y") -> pd.DataFrame
             closes[t] = s
         except KeyError:
             print(f"  ⚠ {t}: not in yfinance response, skipping")
-    return pd.DataFrame(closes).sort_index().ffill()
+    out = pd.DataFrame(closes).sort_index()
+    return out.ffill() if ffill else out

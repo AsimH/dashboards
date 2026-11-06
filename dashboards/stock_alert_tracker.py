@@ -158,7 +158,8 @@ def load_prices() -> pd.DataFrame:
     tickers = all_tickers()
     print(f"  Fetching {len(tickers)} unique tickers from yfinance...")
     # 3-year period so we have a clean 2y return + buffer for weekends/holidays
-    return fetch_yfinance_panel(tickers, period="3y")
+    # No ffill: mixed exchange calendars would pad stale closes and zero out 1D.
+    return fetch_yfinance_panel(tickers, period="3y", ffill=False)
 
 
 # ─────────────────────────────────────────────────────────────────────
