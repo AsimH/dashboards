@@ -181,18 +181,6 @@ TABS = {
             ("Invesco Global Clean Power ETF",            "PBD", "Invesco Global Clean Power ETF"),
         ]),
     ],
-    "Fool.com": [
-        ("", [
-            ("Argenx",            "ARGX", "Argenx SE ADR"),
-            ("Krystal Biotech",   "KRYS", "Krystal Biotech"),
-            ("TransMedics Group", "TMDX", "TransMedics Group"),
-            ("Shopify",           "SHOP", "Shopify Inc"),
-            ("CrowdStrike",       "CRWD", "CrowdStrike Holdings"),
-            ("Reddit",            "RDDT", "Reddit Inc"),
-            ("Nu Holdings",       "NU",   "Nu Holdings"),
-            ("BillionToOne",      "BLLN", "BillionToOne Inc"),
-        ]),
-    ],
     }
 
 # Columns shown in each row, in display order. (label, window_key)
